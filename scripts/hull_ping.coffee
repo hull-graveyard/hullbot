@@ -11,15 +11,18 @@
 # Configuration:
 #   CLOUSEAU_URL
 
-ping = require "clouseau-js"
+clouseau = require "clouseau-js"
+
+_do = (msg) ->
+  load = clouseau.addCheckpoint('OK BUDDY!', 60000);
+  widget = clouseau.addCheckpoint('RENDERED', 20000);
+
+  clouseau.start(process.env.CLOUSEAU_URL).then(load).then(widget)
+
 
 module.exports = (robot) ->
-  robot.respond /clouseau$/i, (msg) ->
-    load = ping.addCheckpoint('OK BUDDY!', 60000);
-    widget = ping.addCheckpoint('RENDERED', 20000);
+  robot.respond /clouseau$/i, () ->
+    _do().then((-> msg.send 'Hullo guys!'), (-> msg.send 'Help me, I\'m sick, I don\'t wanna go to school'))
 
-    ping.start(process.env.CLOUSEAU_URL)
-      .then(load)
-      .then(widget)
-      .then((-> msg.send 'Hullo guys!'), (-> msg.send 'Help me, I\'m sick, I don\'t wanna go to school'))
-
+  robot.router.get "/clouseau", (req, res) ->
+    _do().then((-> res.end 'OK'), (-> res.end 'NOK'))
