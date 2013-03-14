@@ -22,7 +22,7 @@ _do = () ->
 
 module.exports = (robot) ->
   robot.respond /clouseau$/i, (msg) ->
-    _do().then((-> msg.send 'Hullo guys!'), ((err)-> msg.send 'Help me, I\'m sick, I don\'t wanna go to school: ' + err))
+    _do().then((-> msg.send 'Hullo guys!'), ((err)-> msg.send "D'oooohh: #{err}"))
 
   robot.router.get "/clouseau", (req, res) ->
     _do().then((-> res.end 'OK'), ((err)-> res.end 'NOK: ' + err))
