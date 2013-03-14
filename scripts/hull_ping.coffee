@@ -13,28 +13,18 @@
 
 clouseau = require "clouseau-js"
 
-logger = null
-
-renderAlert = (page) ->
-  # @ == Q.defer()
-  page.onAlert (txt)->
-    @reject new Error("Unexpected message: #{txt}") unless txt == 'RENDERED'
-    @resolve(page)
-
-initAlert = (page) ->
-  # @ == Q.defer()
-  page.onAlert (txt)->
-    @reject new Error("Unexpected message: #{txt}") unless txt == 'OK BUDDY!'
-    @resolve(page)
-
+# Expects for a certain text to be displayed through an `alert()` call in the page
+alertCheck = (expectedMessage)->
+  (page)->
+    page.onAlert = (txt)=>
+      @reject new Error("Unexpected message: #{txt}") unless txt == expectedMessage
+      @resolve(page)
 
 
 _do = () ->
-  load = clouseau.addCheckpoint(initAlert, 60000);
-  widget = clouseau.addCheckpoint(renderAlert, 20000);
-
+  load = clouseau.addCheckpoint(alertCheck('OK BUDDY!'), 60000, 'Hull.init called')
+  widget = clouseau.addCheckpoint(alertCheck('RENDERED'), 20000, 'Widget rendered')
   clouseau.start(process.env.CLOUSEAU_URL).then(load).then(widget)
-
 
 module.exports = (robot) ->
   robot.respond /clouseau$/i, (msg) ->
