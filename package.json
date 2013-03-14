@@ -29,7 +29,7 @@
     "mailchimp": "~0.9.5",
     "soupselect": "~0.2.0",
     "htmlparser": "~1.7.6",
-    "clouseau-js": "~0.1.0"
+    "clouseau-js": "~0.1.1"
   },
   "engines": {
     "node": "~0.8.0",

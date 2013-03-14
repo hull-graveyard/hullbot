@@ -13,7 +13,7 @@
 
 clouseau = require "clouseau-js"
 
-_do = (msg) ->
+_do = () ->
   load = clouseau.addCheckpoint('OK BUDDY!', 60000);
   widget = clouseau.addCheckpoint('RENDERED', 20000);
 
@@ -21,8 +21,8 @@ _do = (msg) ->
 
 
 module.exports = (robot) ->
-  robot.respond /clouseau$/i, () ->
-    _do().then((-> msg.send 'Hullo guys!'), (-> msg.send 'Help me, I\'m sick, I don\'t wanna go to school'))
+  robot.respond /clouseau$/i, (msg) ->
+    _do().then((-> msg.send 'Hullo guys!'), ((err)-> msg.send 'Help me, I\'m sick, I don\'t wanna go to school: ' + err))
 
   robot.router.get "/clouseau", (req, res) ->
     _do().then((-> res.end 'OK'), (-> res.end 'NOK'))
