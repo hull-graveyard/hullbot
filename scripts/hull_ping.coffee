@@ -13,9 +13,25 @@
 
 clouseau = require "clouseau-js"
 
+logger = null
+
+renderAlert = (page) ->
+  # @ == Q.defer()
+  page.onAlert (txt)->
+    @reject new Error("Unexpected message: #{txt}") unless txt == 'RENDERED'
+    @resolve(page)
+
+initAlert = (page) ->
+  # @ == Q.defer()
+  page.onAlert (txt)->
+    @reject new Error("Unexpected message: #{txt}") unless txt == 'OK BUDDY!'
+    @resolve(page)
+
+
+
 _do = () ->
-  load = clouseau.addCheckpoint('OK BUDDY!', 60000);
-  widget = clouseau.addCheckpoint('RENDERED', 20000);
+  load = clouseau.addCheckpoint(initAlert, 60000);
+  widget = clouseau.addCheckpoint(renderAlert, 20000);
 
   clouseau.start(process.env.CLOUSEAU_URL).then(load).then(widget)
 
