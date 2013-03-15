@@ -27,7 +27,7 @@ _do = (msg, debug=false) ->
   widget = clouseau.addCheckpoint(alertCheck('RENDERED'), 20000, 'Widget rendered')
   msg.send "Widgetized" if debug
   clouseau.start(process.env.CLOUSEAU_URL||"http://hull-js.s3.amazonaws.com/__ping/index.html").then ()->
-    msg.send "Start Loaded (oh yeah)" if debug
+    msg.send "Start Loaded" if debug
     load
     msg.send "End Loaded" if debug
   .then ()->
